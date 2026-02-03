@@ -24,7 +24,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('dashboard');
+            return redirect()->intended('dashboard')->with('success','Logged in successfully.');
         }
 
         return back()->withErrors([
@@ -38,7 +38,7 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/secured-zwag-admin-login');
+        return redirect()->route('login')->with('success','Logged out successfully.');
     }
 
 }

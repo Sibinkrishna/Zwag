@@ -1,118 +1,117 @@
 @extends('admin.layouts.app')
+
 @section('content')
-    <!-- Start Container Fluid -->
-    <div class="container-xxl">
+<div class="container">
+    <h4 class="mb-4">Edit Attribute</h4>
 
-        <div class="row">
-            <div class="col-xl-12">
-                <div class="card">
-                    <div class="d-flex card-header justify-content-between align-items-center">
-                        <div>
-                            <h4 class="card-title" style="padding: 10px 0px;">Add Product Attribute </h4>
-                        </div>
+    {{-- UPDATE ATTRIBUTE KEY --}}
+    <div class="card mb-4">
+        <div class="card-header">Attribute</div>
+        <div class="card-body">
+            <form method="POST" action="{{ route('attribute.update', $attribute->id) }}">
+                @csrf
+                @method('PUT')
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <label>Attribute Key</label>
+                        <input type="text" name="key"
+                               class="form-control"
+                               value="{{ $attribute->key }}">
                     </div>
-                    <div>
-                        <div class="table-responsive">
-                            <form class="body-form" method="post" action="{{ route('attribute.update', $attribute->id) }}">
-                                @method('PUT')
-                                @csrf
-                                <div id="attributes-container">
-                                    {{-- <div class="row mb-3">
-                                        <div class="col-lg-12">
-                                            <label for="select-Category" class="form-label">Select Category</label>
-                                            <select class="form-control" name="category_id" id="select-Category"
-                                                data-choices name="choices-single-groups">
-                                                <option value="">Choose a Category</option>
-                                                @foreach ($categories as $category)
-                                                    <option value="{{ $category->id }}"
-                                                        {{ ($attribute->category_id == $category->id)?'selected':'' }}>
-                                                        {{ $category->category_name }}</option>
-                                                @endforeach
-
-                                            </select>
-                                        </div>
-                                    </div> --}}
-                                    <div class="row attribute-row">
-                                        <div class="mb-3 col-lg-12 col-sm-12">
-                                            <label class="form-label">Attribute Key</label>
-                                            <input type="text" class="form-control" name="attribute_key"
-                                                value="{{ $attribute->key }}" placeholder="Enter Key">
-                                        </div>
-                                        @php
-                                            $attribute_values = json_decode($attribute->value, true);
-                                        @endphp
-                                        @foreach ($attribute_values as $attribute_value)
-                                            <div class="row attribute-row">
-                                                <div class="mb-3 col-lg-10 col-sm-12">
-                                                    <label class="form-label">Attribute Value</label>
-                                                    <input type="text" class="form-control" name="attribute_value[]"
-                                                        value="{{ $attribute_value }}" placeholder="Enter Value">
-                                                </div>
-
-                                                <div class="mb-3 col-lg-2 col-sm-12 d-flex align-items-end">
-                                                    <button type="button" class="btn btn-danger remove-btn w-100">
-                                                        Remove
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        @endforeach
-
-                                    </div>
-                                </div>
-
-                                <div class="footer-btn-row">
-                                    <button type="button" value="Add More" id="add-more-btn"
-                                        class="btn  yellow-btn add-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 24 24" fill="#fff" width="15px" height="15px"
-                                            fill-rule="evenodd">
-                                            <path fill-rule="evenodd"
-                                                d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z" />
-                                        </svg> Add More</button>
-                                    <button type="submit" value="Save Attribute" class="btn  blk-btn add-btn"> Save
-                                        Attribute</button>
-                                    <button value="Cancel" class="btn  red-btn add-btn"> Cancel</button>
-                                </div>
-                            </form>
-                        </div>
-                        <!-- end table-responsive -->
+                    <div class="col-md-2" style="margin-top: 20px;">
+                        <button class="btn btn-success">Update</button>
                     </div>
-
                 </div>
-            </div>
+            </form>
         </div>
-
     </div>
-    <!-- End Container Fluid -->
-    <script src="{{ asset('admin/assets/js/jquery.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-            // When "Add More" is clicked
-            $("#add-more-btn").click(function() {
-                // Define the HTML for the new row
-                var newRow = `
-        <div class="row attribute-row ">
-            <div class="mb-3 col-lg-10 col-sm-12">
-                <label class="form-label">Attribute Value</label>
-                <input type="text" class="form-control" name="attribute_value[]" placeholder="Enter Value">
-            </div>
-            <div class="mb-3 col-lg-2 col-sm-12 d-flex align-items-end">
-                <button type="button" class="btn btn-danger remove-btn w-100">Remove</button>
-            </div>
-        </div>`;
 
-                // Append it to the container
-                $("#attributes-container").append(newRow);
-            });
+    {{-- ADD ATTRIBUTE VALUE --}}
+    <div class="card mb-4">
+        <div class="card-header">Add Value</div>
+        <div class="card-body">
+            <form method="POST"
+                  action="{{ route('attribute.values.store', $attribute->id) }}">
+                @csrf
 
-            // When "Remove" is clicked (using Event Delegation)
-            $(document).on('click', '.remove-btn', function() {
-                // Ensure at least one row remains if you want, or just remove
-                if ($(".attribute-row").length > 1) {
-                    $(this).closest('.attribute-row').remove();
-                } else {
-                    alert("You must have at least one attribute row.");
-                }
-            });
-        });
-    </script>
+                <div class="row">
+                    <div class="col-md-4">
+                        <input type="text"
+                               name="value"
+                               class="form-control"
+                               placeholder="S, M, Red">
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-primary">Add</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {{-- LIST ATTRIBUTE VALUES --}}
+    <div class="card">
+        <div class="card-header">Attribute Values</div>
+        <div class="card-body">
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th width="180">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($attribute->values as $value)
+                        <tr>
+                            <td>
+                                <form method="POST"
+                                      action="{{ route('attribute.values.update', $value->id) }}"
+                                      class="d-flex">
+                                    @csrf
+                                    @method('PUT')
+
+                                    <input type="text"
+                                           name="value"
+                                           class="form-control me-2"
+                                           value="{{ $value->value }}">
+
+                                    <button class="btn btn-success btn-sm">
+                                        Update
+                                    </button>
+                                </form>
+                            </td>
+                            <td>
+                                <form method="POST"
+                                      action="{{ route('attribute.values.destroy', $value->id) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Delete this value?')">
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+
+                    @if($attribute->values->count() == 0)
+                        <tr>
+                            <td colspan="2" class="text-center text-muted">
+                                No values added yet
+                            </td>
+                        </tr>
+                    @endif
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+    <a href="{{ route('attribute.index') }}" class="btn btn-secondary mt-3">
+        ← Back to Attributes
+    </a>
+
+</div>
 @endsection

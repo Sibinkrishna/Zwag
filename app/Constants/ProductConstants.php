@@ -5,7 +5,7 @@ namespace App\Constants;
 
 class ProductConstants
 {
-    public 
+    public
     const GENDER = [
         '0' => 'Male',
     ];
@@ -13,5 +13,13 @@ class ProductConstants
         'INDIAN' => '₹',
         'US' => '$',
         'EURO' => '€',
+    ];
+    const SIZE = [
+        'XS' => 'Extra Small',
+        'S' => 'Small',
+        'M' => 'Medium',
+        'L' => 'Large',
+        'XL' => 'Extra Large',
+        'XXL' => 'Double Extra Large',
     ];
 }

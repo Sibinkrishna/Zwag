@@ -59,36 +59,74 @@
                                                         </div>
                                                         @endif
                                                         <div>
-                                                            <a href="#!" class="text-dark fw-medium fs-15">{{ $product->product_name }}</a>
-                                                            <p class="text-muted mb-0 mt-1 fs-13"><span>Size : </span>
-                                                               
+                                                            @php
+                                                            $values = $product->product_varient
+                                                            ->pluck('product_associate') // get JSON/array column
+                                                            ->map(function($item){
+                                                            return is_string($item)
+                                                            ? json_decode($item, true)[0] ?? null
+                                                            : $item[0] ?? null;
+                                                            })
+                                                            ->filter() // remove nulls
+                                                            ->unique(); // avoid duplicates
+                                                            $sizeValues = $values->implode(', ');
+                                                            @endphp
+
+                                                            <a href="{{ route('product.edit',$product->id) }}" class="text-dark fw-medium fs-15">{{ $product->product_name }}</a>
+                                                            <p class="text-muted mb-0 mt-1 fs-13">
+                                                                <span>Size :
+
+                                                                {{ $sizeValues }}
+                                                                </span>
                                                             </p>
+
                                                         </div>
                                                     </div>
                                             </td>
+                                            @if($product->product_varient->count() > 1)
                                             <td>{{ ProductConstants::RUPEES_SYMBOL['INDIAN'] }} {{ number_format($product->product_varient->first()->price, 2) }}</td>
-                                            <td>
-                                                    <p class="mb-1 text-muted"><span class="text-dark fw-medium">{{ $product->product_varient->first()->stock }}</span></p>
+                                            @else
+                                            <td>NIL</td>
+                                            @endif
+                                            @if($product->product_varient->count() > 1)
+                                            <td><p class="mb-1 text-muted"><span class="text-dark fw-medium">{{ $product->product_varient->first()->stock }}</span></p>
                                                     <!-- <p class="mb-0 text-muted">{{ $product->sold }} Sold</p> -->
                                             </td>
-                                            <td>{{ $product->category->first()->category_name }}</td>
-                                            <td>{{ $product->subcategory->first()->sub_category }}</td>
+                                            @else
+                                            <td>NIL</td>
+                                            @endif
+                                            <td>{{ $product->category->category_name ?? 'NIL' }}</td>
+                                            <td>{{  $product->subcategory->sub_category ?? 'NIL' }}</td>
                                             <td>
                                                     <div class="form-check form-switch">
-                                                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked{{ $product->id }}" {{ $product->status ? 'checked' : '' }} disabled>
+                                                        <form action="{{ route('product.status.update',$product->id) }}" method="POST">
+                                                            @csrf
+                                                            <input class="form-check-input"
+                                                                type="checkbox"
+                                                                name="status"
+                                                                {{ $product->status ? 'checked' : '' }}
+                                                                onchange="this.form.submit()">
+                                                        </form>
                                                     </div>
                                             </td>
                                             <td>{{ $product->created_at->format('d F Y') }}</td>
                                             <td>
                                                     <div class="d-flex gap-2">
                                                         <a href="{{ route('product.edit',$product->id)}}" class="btn btn-soft-primary btn-sm btn-soft-icons" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Edit"><iconify-icon icon="solar:pen-2-broken" class="align-middle fs-18"></iconify-icon></a>
-                                                        <a href="#!" class="btn btn-soft-danger btn-sm btn-soft-icons" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Delete"><iconify-icon icon="solar:trash-bin-minimalistic-2-broken" class="align-middle fs-18"></iconify-icon></a>
+                                                        <form action="{{ route('product.destroy', $product->id) }}" method="post">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-soft-danger btn-sm btn-soft-icons" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Delete" onclick="return confirm('Are you sure you want to delete this product?')">
+                                                                <iconify-icon icon="solar:trash-bin-minimalistic-2-broken" class="align-middle fs-18"></iconify-icon>
+                                                            </button>
+                                                        </form>
+                                                        {{-- <a href="#!" class="btn btn-soft-danger btn-sm btn-soft-icons" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Delete"><iconify-icon icon="solar:trash-bin-minimalistic-2-broken" class="align-middle fs-18"></iconify-icon></a> --}}
                                                     </div>
                                             </td>
                                         </tr>
                                         @empty
                                         @endforelse
-                                        <tr>
+                                        {{-- <tr>
                                             <td>1</td>
                                             <td>
                                                     <div class="d-flex align-items-center gap-2">
@@ -156,13 +194,18 @@
                                                         <a href="#!" class="btn btn-soft-danger btn-sm btn-soft-icons" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Delete"><iconify-icon icon="solar:trash-bin-minimalistic-2-broken" class="align-middle fs-18"></iconify-icon></a>
                                                     </div>
                                             </td>
+<<<<<<< HEAD
                                         </tr>
+=======
+                                        </tr> --}}
+>>>>>>> 2f530b4 (first-commmit)
 
                                     </tbody>
                                 </table>
                         </div>
                         <!-- end table-responsive -->
                     </div>
+<<<<<<< HEAD
                     <div class="card-footer border-top">
                         <nav aria-label="Page navigation example">
                                 <ul class="pagination justify-content-end mb-0">
@@ -174,6 +217,9 @@
                                 </ul>
                         </nav>
                     </div>
+=======
+                    {{ $products->links('admin.vendor.pagination') }}
+>>>>>>> 2f530b4 (first-commmit)
                 </div>
             </div>
 

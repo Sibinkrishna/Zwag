@@ -14,7 +14,7 @@ class SubCategoryController extends Controller
     {
         $subtitle = "Sub Categories List";
         $metatitle = "Sub Categories List";
-        $subcategories=SubCategory::with('category')->get();;
+        $subcategories=SubCategory::with('category')->paginate(10);;
         return view('admin.subcategory.index', compact('subtitle', 'metatitle','subcategories'));
     }
 

@@ -21,7 +21,7 @@ class ProductController extends Controller
         $subtitle = "Product List";
         $metatitle = "Product List";
 
-        $products = Product::with('product_varient','product_images')->get();
+        $products = Product::with(['product_varient','product_images','category','subcategory'])->paginate(10);
         // dd($products);
         return view('admin.product.index', compact('subtitle', 'metatitle','products'));
     }
@@ -170,6 +170,72 @@ class ProductController extends Controller
         $attributes = Attribute::all();
         $brands = Brand::all();
         $product->load('product_varient','product_images');
+        // dd($product);
         return view('admin.product.edit', compact('subtitle', 'metatitle', 'categories', 'attributes', 'product','brands'));
-    }   
+    }
+
+    public function update(Request $request,$id){
+
+        $product=Product::findOrFail($id);
+        $product->update($request->only([
+            'product_name','category_id','subcategory_id',
+            'brand_id','weight','gender','description',
+            'discount_type','product_discount',
+            'meta_title','meta_keyword','meta_description',
+        ]));
+        if($request->hasFile('image_url')){
+            $folder='products/'.$product->id.'-'.Str::slug($product->product_name);
+            foreach($request->file('image_url') as $image){
+                $path=$image->store($folder,'public');
+                ProductImage::create([
+                    'product_id'=>$product->id,
+                    'image_url'=>$path,
+                ]);
+            }
+        }
+        $product->product_varient()->delete();
+
+        foreach($request->price as $i=>$price){
+                ProductVariant::create([
+                'product_id'=>$product->id,
+                'tag_number'=>$request->tag_number[$i],
+                'price'=>$price,
+                'stock'=>$request->stock[$i],
+                'selling_price'=>$request->selling_price[$i],
+                'total_price'=>$request->total_price[$i],
+                'discount'=>$request->discount[$i],
+                'tag'=>implode(',',$request->tag[$i]??[]),
+                'product_associate'=>json_encode(
+                $request->product_associate[$i]??[]
+                )
+            ]);
+        }
+
+    return redirect()->route('product.index')->with('success','Updated');
+
+    }
+    public function productImageDelete($id){
+        $image=ProductImage::findOrFail($id);
+        unlink(storage_path('app/public/'.$image->image_url));
+        $image->delete();
+        return back()->with('success','Image Deleted');
+    }
+
+    public function destroy($id){
+        $product=Product::findOrFail($id);
+        foreach($product->product_images as $image){
+            unlink(storage_path('app/public/'.$image->image_url));
+        }
+        $product->product_varient()->delete();
+        $product->delete();
+        return back()->with('success','Product Deleted');
+    }
+
+    public function statusUpdate(Request $request, $id){
+        $product=Product::findOrFail($id);
+        $product->status = $request->has('status') ? 1 : 0;
+        $product->save();
+        return back()->with('success','Product status updated successfully');
+    }
+
 }

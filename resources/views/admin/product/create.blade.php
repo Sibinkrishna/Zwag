@@ -97,10 +97,17 @@
                                     <div class="mb-3">
                                         <label for="product-brand" class="form-label">Brand</label>
                                          <select class="form-control" id="brand" data-choices data-choices-groups data-placeholder="Select brand"
+<<<<<<< HEAD
                                             name="brand">
                                             <option value="" selected disabled>Select Brand</option>
                                             @forelse($brands as $brand)
                                                 <option value="{{ $brand->id }}">{{$brand->name}}</option>
+=======
+                                            name="brand_id">
+                                            <option value="" selected disabled>Select Brand</option>
+                                            @forelse($brands as $brand)
+                                                <option value="{{ $brand->id}}">{{$brand->name}}</option>
+>>>>>>> 2f530b4 (first-commmit)
                                             @empty
                                                 <option value="" disabled>No Brand Found</option>
                                             @endforelse
@@ -176,7 +183,7 @@
                                             <div class="col-lg-6 mb-3">
                                                 <label class="form-label">{{ ucfirst($attribute->key) }}</label>
                                                 <select class="form-control"
-                                                        data-choices data-choices-groups
+                                                        data-choices
                                                         name="product_associate[0][]">
                                                     <option value="">Choose {{ $attribute->key }}</option>
                                                     @foreach (json_decode($attribute->value) as $value)

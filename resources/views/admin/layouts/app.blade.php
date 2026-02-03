@@ -209,10 +209,14 @@
 
                                 <div class="dropdown-divider my-1"></div>
 
-                                <a class="dropdown-item text-danger" href="auth-signin.php">
-                                    <i class="bx bx-log-out fs-18 align-middle me-1"></i><span
-                                        class="align-middle">Logout</span>
-                                </a>
+                                <form action="{{ route('logout') }}" method="post">
+                                    @csrf
+                                    <button class="dropdown-item text-danger" type="submit">
+                                        <i class="bx bx-log-out fs-18 align-middle me-1"></i><span
+                                            class="align-middle">Logout</span>
+                                    </button>
+                                </form>
+
                             </div>
                         </div>
 

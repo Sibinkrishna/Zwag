@@ -14,7 +14,7 @@ class CategoryController extends Controller
     {
         $subtitle = "Categories List";
         $metatitle = "Categories List";
-        $categories = Category::all();
+        $categories = Category::paginate(10);
         return view('admin.category.index', compact('subtitle', 'metatitle', 'categories'));
     }
 

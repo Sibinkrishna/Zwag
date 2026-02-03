@@ -38,24 +38,61 @@
                                                                  </select>
                                                             </div>
                                                        </div> --}}
-                                                       <div class="row attribute-row">
-                                                            <div class="mb-3 col-lg-12 col-sm-12">
+                                                       <div class="row d-flex justify-content-between align-items-center">
+                                                            <div class="col-lg-6 col-sm-6">
                                                                  <label class="form-label">Attribute Key</label>
-                                                                 <input type="text" class="form-control" name="attribute_key" placeholder="Enter Key">
+                                                                 <input type="text" class="form-control" name="key" placeholder="Enter Key">
                                                             </div>
-                                                            <div class="mb-3 col-lg-12 col-sm-12">
-                                                                 <label class="form-label">Attribute Value</label>
-                                                                 <input type="text" class="form-control" name="attribute_value[]" placeholder="Enter Value">
+                                                            <div class="col-lg-6 col-sm-6">
+                                                                <div class="footer-btn-row" style="margin-top:30px;">
+                                                                <button type="submit" value="Save Attribute" class="btn blk-btn add-btn"> Save Attribute</button>
+                                                                <a value="Cancel" class="btn red-btn add-btn" href="{{ route('attribute.index') }}" > Cancel</a>
+                                                                </div>
                                                             </div>
                                                        </div>
                                                   </div>
 
-                                                  <div class="footer-btn-row">
-                                                       <button type="button" value="Add More" id="add-more-btn" class="btn  yellow-btn add-btn"><svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="#fff" width="15px" height="15px" fill-rule="evenodd"><path fill-rule="evenodd" d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"/></svg> Add More</button>
-                                                       <button type="submit" value="Save Attribute" class="btn  blk-btn add-btn"> Save Attribute</button>
-                                                       <button value="Cancel" class="btn  red-btn add-btn"> Cancel</button>
-                                                  </div>
                                              </form>
+                                        </div>
+                                        <!-- end table-responsive -->
+                                   </div>
+
+                              </div>
+                              <div class="card">
+                                   <div class="d-flex card-header justify-content-between align-items-center">
+                                        <div>
+                                             <h4 class="card-title" style="padding: 10px 0px;" >Add Attribute Values</h4>
+                                        </div>
+                                   </div>
+                                   <div>
+                                        <div class="table-responsive">
+
+                                                  <div id="attributes-container">
+                                                    @foreach($attributes as $attribute)
+                                                    <form class="body-form" method="POST" action="{{ route('attribute.values.store', $attribute) }}">
+                                                            @csrf
+                                                       <div class="row d-flex justify-content-between align-items-center">
+                                                            <div class="col-lg-6 col-sm-6">
+                                                                 <label class="form-label">{{ strtoupper($attribute->key) }}</label>
+                                                                 <input type="text" class="form-control" name="value" placeholder="">
+                                                            </div>
+                                                            <div class="col-lg-6 col-sm-6">
+                                                                <div class="footer-btn-row" style="margin-top:30px;">
+                                                                <button type="submit" value="Save Attribute" class="btn blk-btn add-btn"> Save {{ ucfirst($attribute->key) }}</button>
+                                                                <a value="Cancel" class="btn red-btn add-btn" href="{{ route('attribute.index') }}" > Cancel</a>
+                                                                </div>
+                                                            </div>
+                                                       </div>
+                                                       </form>
+                                                       <ul>
+                                                            @foreach($attribute->values as $value)
+                                                                <li>{{ $value->value }}</li>
+                                                            @endforeach
+                                                        </ul>
+                                                       @endforeach
+                                                  </div>
+
+
                                         </div>
                                         <!-- end table-responsive -->
                                    </div>

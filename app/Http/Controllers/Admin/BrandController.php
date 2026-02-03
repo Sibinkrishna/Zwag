@@ -12,7 +12,7 @@ class BrandController extends Controller
     {
         $subtitle = "Brand List";
         $metatitle = "Brand List";
-        $brands = Brand::get();
+        $brands = Brand::paginate(10);
         return view('admin.brand.index', compact('subtitle', 'metatitle','brands'));
     }
     public function create()
@@ -61,7 +61,7 @@ class BrandController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'logo_url' => 'nullable|image|mimes:jpeg,png,jpg|max:100',
-            'status' => 'required|boolean', 
+            'status' => 'required|boolean',
         ]);
         // dd($request->all());
         $brand = Brand::findOrFail($id);

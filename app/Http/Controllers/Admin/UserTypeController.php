@@ -13,7 +13,7 @@ class UserTypeController extends Controller
     {
         $subtitle = "User Type List";
         $metatitle = "User Type List";
-        $usertypes = Role::get();
+        $usertypes = Role::paginate(10);
         return view('admin.userType.index', compact('subtitle', 'metatitle', 'usertypes'));
     }
 

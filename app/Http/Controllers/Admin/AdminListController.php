@@ -15,7 +15,7 @@ class AdminListController extends Controller
     public function index(){
         $subtitle="Admin List";
         $metatitle="Admin List";
-        $users=User::all();
+        $users=User::paginate(10);
         return view('admin.adminList.index',compact('subtitle','metatitle','users'));
     }
 

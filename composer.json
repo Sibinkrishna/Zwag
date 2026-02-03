@@ -12,6 +12,10 @@
         "php": "^8.2",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
+<<<<<<< HEAD
+=======
+        "livewire/livewire": "^4.1",
+>>>>>>> 2f530b4 (first-commmit)
         "spatie/laravel-permission": "^6.24"
     },
     "require-dev": {
